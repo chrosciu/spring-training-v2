@@ -8,11 +8,11 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-public class JpaBorrowerRepository implements BorrowerRepository {
+public class EntityManagerBorrowerRepository implements BorrowerRepository {
 
     private final EntityManager entityManager;
 
-    public JpaBorrowerRepository(EntityManager entityManager) {
+    public EntityManagerBorrowerRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
