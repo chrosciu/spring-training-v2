@@ -1,5 +1,6 @@
 package pl.wojtyna.trainings.spring.examples.injection;
 
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
@@ -25,6 +26,13 @@ public class InjectionExampleConfiguration {
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     public SingletonServiceUsingPrototype singletonService(PrototypeScopeService prototypeScopeService) {
         return new SingletonServiceUsingPrototype(prototypeScopeService);
+    }
+
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public SingletonServiceUsingPrototypeWithObjectProvider singletonServiceUsingPrototypeWithObjectProvider(
+            ObjectFactory<PrototypeScopeService> prototypeScopeServiceObjectFactory) {
+        return new SingletonServiceUsingPrototypeWithObjectProvider(prototypeScopeServiceObjectFactory);
     }
 
     @Bean

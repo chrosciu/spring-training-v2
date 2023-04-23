@@ -27,6 +27,8 @@ class InjectionExplanationTest {
     @Autowired
     private SingletonServiceUsingPrototype singletonService;
     @Autowired
+    private SingletonServiceUsingPrototypeWithObjectProvider singletonServiceUsingPrototypeWithObjectProvider;
+    @Autowired
     private SingletonServiceUsingRequest singletonServiceUsingRequest;
 
     // @formatter:off
@@ -52,6 +54,25 @@ class InjectionExplanationTest {
 
     // @formatter:off
     @DisplayName(
+            """
+             given prototype bean and singleton bean,
+             when prototype bean is injected into singleton,
+             then then singleton uses the same instance all the time
+            """
+    )
+    // @formatter:on
+    @Test
+    void injectPrototypeTest1() {
+        // when
+        var idOfPrototypeBeanAfterFirstInvocation = singletonServiceUsingPrototypeWithObjectProvider.getIdOfPrototypeBean();
+        var idOfPrototypeBeanAfterSecondInvocation = singletonServiceUsingPrototypeWithObjectProvider.getIdOfPrototypeBean();
+
+        // then
+        assertThat(idOfPrototypeBeanAfterFirstInvocation).isNotEqualTo(idOfPrototypeBeanAfterSecondInvocation);
+    }
+
+    // @formatter:off
+    @DisplayName(
         """
          given prototype bean and two singleton beans,
          when prototype bean is injected into both singletons,
@@ -60,7 +81,7 @@ class InjectionExplanationTest {
     )
     // @formatter:on
     @Test
-    void injectPrototypeTest1() {
+    void injectPrototypeTest2() {
         // when
         var idOfPrototypeBeanUsedByFirstSingletonService = singletonService.getIdOfPrototypeBean();
         var idOfPrototypeBeanUsedByOtherSingletonService = otherSingletonService.getIdOfPrototypeBean();
