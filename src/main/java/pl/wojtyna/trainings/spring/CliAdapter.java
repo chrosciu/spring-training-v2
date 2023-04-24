@@ -3,16 +3,16 @@ package pl.wojtyna.trainings.spring;
 import java.util.stream.Stream;
 
 public class CliAdapter {
-    private final CliMapper cliMapper;
+    private final CliCommandsMapper cliCommandsMapper;
 
-    public CliAdapter(CliMapper cliMapper) {
-        this.cliMapper = cliMapper;
+    public CliAdapter(CliCommandsMapper cliCommandsMapper) {
+        this.cliCommandsMapper = cliCommandsMapper;
     }
 
     public void run(String[] args) {
         var investorRepository = new InMemoryInvestorRepository();
         var investorService = new InvestorService(investorRepository);
-        var registerInvestorCommand = cliMapper.map(args).orElseThrow();
+        var registerInvestorCommand = cliCommandsMapper.map(args).orElseThrow();
         System.out.println("Registering new investor");
         investorService.register(registerInvestorCommand);
         System.out.println("New investor registered");
