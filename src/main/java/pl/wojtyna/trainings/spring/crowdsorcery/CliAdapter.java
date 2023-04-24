@@ -1,8 +1,13 @@
 package pl.wojtyna.trainings.spring.crowdsorcery;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 @Component
+@Slf4j
 public class CliAdapter {
 
     private final CliCommandsMapper cliCommandsMapper;
@@ -11,6 +16,16 @@ public class CliAdapter {
     public CliAdapter(CliCommandsMapper cliCommandsMapper, InvestorService investorService) {
         this.cliCommandsMapper = cliCommandsMapper;
         this.investorService = investorService;
+    }
+
+    @PostConstruct
+    private void init() {
+        log.info("CliAdapter is ready");
+    }
+
+    @PreDestroy
+    private void destroy() {
+        log.info("CliAdapter is going down");
     }
 
     public void run(String[] args) {
