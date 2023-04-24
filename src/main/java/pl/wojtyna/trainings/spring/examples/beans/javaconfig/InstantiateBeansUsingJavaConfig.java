@@ -1,10 +1,10 @@
 package pl.wojtyna.trainings.spring.examples.beans.javaconfig;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@SpringBootConfiguration
+@Configuration
 @Import(JavaConfiguration.class)
 public class InstantiateBeansUsingJavaConfig {
 
