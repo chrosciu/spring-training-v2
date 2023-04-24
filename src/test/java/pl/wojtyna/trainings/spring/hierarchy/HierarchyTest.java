@@ -45,6 +45,17 @@ public class HierarchyTest {
     @DisplayName("RootChild2Context cannot access beans defined by RootChild1Context, but can access parent beans")
     @Test
     void test1() {
+        var context = new SpringApplicationBuilder()
+                .parent(RootContext.class)
+                .child(RootChild1Context.class)
+                .sibling(RootChild2Context.class)
+                .run();
 
+        assertThatThrownBy(() -> context.getBean(RootChild1BeanOne.class)).isInstanceOf(NoSuchBeanDefinitionException.class);
+        assertThatThrownBy(() -> context.getBean(RootChild1BeanTwo.class)).isInstanceOf(NoSuchBeanDefinitionException.class);
+
+        assertThat(context.getBean(CoreBeanOne.class)).isNotNull();
+        assertThat(context.getBean(CoreBeanTwo.class)).isNotNull();
+        assertThat(context.getBean(RootChild2Bean.class)).isNotNull();
     }
 }
