@@ -182,4 +182,27 @@ class RegisterAndFetchInvestorRestApiIT {
                 .andExpect(jsonPath("$.reason", is("No investor with id any-id has been found")))
                 .andDo(print());
     }
+
+    // @formatter:off
+    @DisplayName(
+            """
+             given investor service fails when fetching any investor,
+             when GET on /investorModule/api/v0/investors/any-id,
+             then status is 500 and error JSON response is produced
+            """
+    )
+    // @formatter:on
+    @Test
+    void test6() throws Exception {
+        // given
+        doReturn(List.of()).when(investorService)
+                .findAll();
+
+        // when
+        mockMvc.perform(get("/investorModule/api/v0/investors/any-id")
+                        .header("Accept-Language", "cs"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.reason", is("No investor with id any-id has been found")))
+                .andDo(print());
+    }
 }

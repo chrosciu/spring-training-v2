@@ -25,11 +25,12 @@ public class TopLevelExceptionHandler {
     }
 
     @ExceptionHandler(InvestorRestApi.NoInvestorFoundException.class)
-    private ResponseEntity<GenericErrorResponse> handleNoInvestorFoundException(InvestorRestApi.NoInvestorFoundException exception) {
+    private ResponseEntity<GenericErrorResponse> handleNoInvestorFoundException(
+            InvestorRestApi.NoInvestorFoundException exception, Locale locale) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new GenericErrorResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(),
                         messageSource.getMessage(InvestorRestApi.NoInvestorFoundException.class.getSimpleName(),
-                                new Object[]{exception.getId()}, Locale.getDefault())));
+                                new Object[]{exception.getId()}, locale)));
     }
 
     private record GenericErrorResponse(String status, String reason) {}
