@@ -18,19 +18,17 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Register and fetch investor REST API")
-//@SpringBootTest
-//@AutoConfigureMockMvc
 @WebMvcTest(InvestorRestApi.class)
 @MockBean(InvestorService.class)
 class RegisterAndFetchInvestorRestApiIT {
 
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private InvestorService investorService;
 
@@ -57,8 +55,8 @@ class RegisterAndFetchInvestorRestApiIT {
                           }
                           """;
         when(investorService.findAll()).thenReturn(List.of(new Investor("10",
-                "George",
-                new InvestorProfile(100, false, "reflink"))));
+                                                                        "George",
+                                                                        new InvestorProfile(100, false, "reflink"))));
 
         // when
         var registeredInvestorLocation = mockMvc.perform(post("/investorModule/api/v0/investors").contentType(MediaType.APPLICATION_JSON)
@@ -67,7 +65,6 @@ class RegisterAndFetchInvestorRestApiIT {
                                                                                                      "InvestorSecret",
                                                                                                      "aspecialsecret"))
                                                 .andExpect(status().isCreated())
-                                                .andDo(print())
                                                 .andReturn()
                                                 .getResponse()
                                                 .getHeader("Location");
