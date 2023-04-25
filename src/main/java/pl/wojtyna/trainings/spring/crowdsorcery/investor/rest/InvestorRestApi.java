@@ -1,6 +1,7 @@
 package pl.wojtyna.trainings.spring.crowdsorcery.investor.rest;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,10 +28,17 @@ public class InvestorRestApi {
     }
 
     @PostMapping
-    public ResponseEntity<Void> register(@RequestBody RegisterInvestorRestDto registerInvestorRestDto) {
-        log.info("Register investor");
-        investorService.register(new RegisterInvestor(registerInvestorRestDto.id(), registerInvestorRestDto.name()));
-        return ResponseEntity.created(URI.create("/investorModule/api/v0/investors/%s".formatted(registerInvestorRestDto.id())))
+    public ResponseEntity<RegisterInvestorErrorResponse> register(@RequestBody RegisterInvestorRestDto registerInvestorRestDto) {
+        try {
+            investorService.register(new RegisterInvestor(registerInvestorRestDto.id(),
+                                                          registerInvestorRestDto.name()));
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body(new RegisterInvestorErrorResponse(registerInvestorRestDto, e.getMessage()));
+        }
+        return ResponseEntity.created(URI.create("/investorModule/api/v0/investors/%s".formatted(
+                                 registerInvestorRestDto.id())))
                              .build();
     }
 
@@ -42,5 +50,9 @@ public class InvestorRestApi {
                               .filter(investor -> Objects.equals(investor.id(), id))
                               .map(investor -> new InvestorFetchResultRestDto(investor.id(), investor.name()))
                               .findAny();
+    }
+
+    private record RegisterInvestorErrorResponse(RegisterInvestorRestDto command, String reason) {
+
     }
 }
