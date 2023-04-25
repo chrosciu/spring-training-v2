@@ -1,5 +1,6 @@
 package pl.wojtyna.trainings.spring.crowdsorcery.investor.rest;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.InvestorService;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.RegisterInvestor;
 
+import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -23,9 +25,10 @@ public class InvestorRestApi {
     }
 
     @PostMapping
-    public RegisterInvestorResultRestDto register(@RequestBody RegisterInvestorRestDto registerInvestorRestDto) {
+    public ResponseEntity<Void> register(@RequestBody RegisterInvestorRestDto registerInvestorRestDto) {
         investorService.register(new RegisterInvestor(registerInvestorRestDto.id(), registerInvestorRestDto.name()));
-        return new RegisterInvestorResultRestDto(registerInvestorRestDto.id());
+        return ResponseEntity.created(URI.create("/investorModule/api/v0/investors/%s".formatted(registerInvestorRestDto.id())))
+                             .build();
     }
 
     @GetMapping("/{id}")
