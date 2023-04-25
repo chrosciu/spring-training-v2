@@ -9,10 +9,10 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import pl.wojtyna.trainings.spring.crowdsorcery.CrowdSorceryRootContextConfiguration;
-import pl.wojtyna.trainings.spring.crowdsorcery.investor.InvestorProfile;
-import pl.wojtyna.trainings.spring.crowdsorcery.investor.InvestorProfileService;
-import pl.wojtyna.trainings.spring.crowdsorcery.investor.InvestorService;
-import pl.wojtyna.trainings.spring.crowdsorcery.investor.RegisterInvestor;
+import pl.wojtyna.trainings.spring.crowdsorcery.investor.profile.InvestorProfile;
+import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.InvestorProfileService;
+import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.InvestorService;
+import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.RegisterInvestor;
 
 import java.util.Optional;
 
@@ -33,18 +33,21 @@ public class WhenInvestorIsRegisteredThenNotificationIsSentTest {
     void test() {
         // given
         var mailSenderMock = mock(MailSender.class);
-        var context = new SpringApplicationBuilder()
-                .properties("spring.main.allow-bean-definition-overriding=true")
-                .parent(CrowdSorceryRootContextConfiguration.class)
-                .initializers((ApplicationContextInitializer<GenericApplicationContext>) applicationContext -> {
-                    applicationContext.registerBean(InvestorProfileService.class,
-                            () -> id -> Optional.of(new InvestorProfile(100, true, "https://chrost.eu")));
-                })
-                .child(NotificationModuleConfiguration.class)
+        var context = new SpringApplicationBuilder().parent(CrowdSorceryRootContextConfiguration.class)
+                                                    .properties("spring.main.allow-bean-definition-overriding=true")
+                                                    .initializers((ApplicationContextInitializer<GenericApplicationContext>) applicationContext -> {
+                                                        applicationContext.registerBean(InvestorProfileService.class,
+                                                                                        () -> (id) -> Optional.of(new InvestorProfile(
+                                                                                            100,
+                                                                                            true,
+                                                                                            "http://localhost:8080?ref=123")));
+                                                    })
+                                                    .child(NotificationModuleConfiguration.class)
                 .initializers((ApplicationContextInitializer<GenericApplicationContext>) applicationContext -> {
                     applicationContext.registerBean(MailSender.class, () -> mailSenderMock);
                 })
-                .run("-id=123", "-name=Henry");
+                                                    .run("-id=123", "-name=Henry");
+
         var investorService = context.getBean(InvestorService.class);
 
         // when

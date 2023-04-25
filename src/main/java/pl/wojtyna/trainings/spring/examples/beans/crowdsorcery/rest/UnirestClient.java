@@ -1,10 +1,12 @@
-package pl.wojtyna.trainings.spring.crowdsorcery.rest;
+package pl.wojtyna.trainings.spring.examples.beans.crowdsorcery.rest;
 
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 public class UnirestClient implements RestClient {
 
     private final String resourceUrl;
@@ -18,7 +20,6 @@ public class UnirestClient implements RestClient {
             return Optional.ofNullable(response.getBody());
         }
         catch (UnirestException e) {
-            e.printStackTrace();
             return Optional.empty();
         }
     }
