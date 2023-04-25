@@ -31,6 +31,10 @@ public class NotificationModuleConfiguration {
         return new SimpleMailNotificationService(mailSender, emailAddressResolver);
     }
 
+    private NotificationService stubbedNotificationService() {
+        return event -> {};
+    }
+
     @Bean
     public MailSender mailSender() {
         return new MailSender() {
