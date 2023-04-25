@@ -1,5 +1,6 @@
 package pl.wojtyna.trainings.spring.crowdsorcery.investor.rest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/investorModule/api/v0/investors")
+@Slf4j
 public class InvestorRestApi {
 
     private final InvestorService investorService;
@@ -26,6 +28,7 @@ public class InvestorRestApi {
 
     @PostMapping
     public ResponseEntity<Void> register(@RequestBody RegisterInvestorRestDto registerInvestorRestDto) {
+        log.info("Register investor");
         investorService.register(new RegisterInvestor(registerInvestorRestDto.id(), registerInvestorRestDto.name()));
         return ResponseEntity.created(URI.create("/investorModule/api/v0/investors/%s".formatted(registerInvestorRestDto.id())))
                              .build();
@@ -33,6 +36,7 @@ public class InvestorRestApi {
 
     @GetMapping("/{id}")
     public Optional<InvestorFetchResultRestDto> fetch(@PathVariable("id") String id) {
+        log.info("Get investor");
         return investorService.findAll()
                               .stream()
                               .filter(investor -> Objects.equals(investor.id(), id))

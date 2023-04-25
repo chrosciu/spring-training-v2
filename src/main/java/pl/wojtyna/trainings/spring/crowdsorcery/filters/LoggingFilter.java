@@ -25,5 +25,6 @@ public class LoggingFilter extends GenericFilterBean {
                  servletRequest.getLocalAddr(),
                  servletRequest.getRemoteHost(), servletRequest.getRemoteAddr());
         filterChain.doFilter(servletRequest, servletResponse);
+        log.info("After filter chain");
     }
 }
