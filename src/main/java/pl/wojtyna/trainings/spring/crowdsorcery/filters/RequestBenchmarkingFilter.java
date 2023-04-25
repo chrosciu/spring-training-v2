@@ -11,22 +11,17 @@ import javax.servlet.ServletResponse;
 import java.io.IOException;
 
 @Slf4j
-@Order(0)
-public class LoggingFilter extends GenericFilterBean {
+@Order(1)
+public class RequestBenchmarkingFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
-        log.info("""
-                 Logging request
-                 Local address {}
-                 Remote host {}
-                 Remote address {}
-                 """,
-                 servletRequest.getLocalAddr(),
-                 servletRequest.getRemoteHost(), servletRequest.getRemoteAddr());
+        log.debug("Started  request benchmarking");
+        var start = System.currentTimeMillis();
         filterChain.doFilter(servletRequest, servletResponse);
-        log.info("After filter chain");
+        var end = System.currentTimeMillis();
+        log.debug("Request took {}ms", end - start);
     }
 }
