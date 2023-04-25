@@ -1,4 +1,4 @@
-package pl.wojtyna.trainings.spring.crowdsorcery.rest;
+package pl.wojtyna.trainings.spring.crowdsorcery.investor.rest;
 
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +23,7 @@ class RegisterAndFetchInvestorRestApiIT {
     @Autowired
     private MockMvc mockMvc;
 
+    // @formatter:off
     @DisplayName(
         """
          given JSON request body
@@ -49,13 +50,15 @@ class RegisterAndFetchInvestorRestApiIT {
         var responseBody = mockMvc.perform(post("/investorModule/api/v0/investors").contentType(MediaType.APPLICATION_JSON)
                                                                                    .content(requestBody))
                                   .andExpect(status().isOk())
-                                  .andReturn().getResponse().getContentAsString();
+                                  .andReturn()
+                                  .getResponse()
+                                  .getContentAsString();
 
         // then
         String registeredInvestorId = JsonPath.parse(responseBody).read("$.id");
         mockMvc.perform(get("/investorModule/api/v0/investors/{id}", registeredInvestorId))
                .andExpect(status().isOk())
-               .andExpect(jsonPath("$.id", is(10)))
+               .andExpect(jsonPath("$.id", is("10")))
                .andExpect(jsonPath("$.name", is("George")));
     }
 }
