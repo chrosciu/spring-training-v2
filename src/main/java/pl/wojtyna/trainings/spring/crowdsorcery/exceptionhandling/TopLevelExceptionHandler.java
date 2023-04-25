@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class TopLevelExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
-    private ResponseEntity<GenericErrorResponse> controllerExceptionHandler(RuntimeException exception) {
+    private ResponseEntity<GenericErrorResponse> handleGenericException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                              .body(new GenericErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                                                             exception.getMessage()));

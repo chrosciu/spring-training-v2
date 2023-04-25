@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.InvestorService;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.RegisterInvestor;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class InvestorRestApi {
     }
 
     @PostMapping
-    public ResponseEntity<Void> register(@RequestBody RegisterInvestorRestDto registerInvestorRestDto) {
+    public ResponseEntity<Void> register(@RequestBody @Valid RegisterInvestorRestDto registerInvestorRestDto) {
         investorService.register(new RegisterInvestor(registerInvestorRestDto.id(),
                 registerInvestorRestDto.name()));
         return ResponseEntity.created(URI.create("/investorModule/api/v0/investors/%s".formatted(
