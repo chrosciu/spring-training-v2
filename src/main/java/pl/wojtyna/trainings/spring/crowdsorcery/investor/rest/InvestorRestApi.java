@@ -14,7 +14,6 @@ import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.RegisterInvesto
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/investorModule/api/v0/investors")
@@ -37,12 +36,25 @@ public class InvestorRestApi {
     }
 
     @GetMapping("/{id}")
-    public Optional<InvestorFetchResultRestDto> fetch(@PathVariable("id") String id) {
+    public InvestorFetchResultRestDto fetch(@PathVariable("id") String id) {
         log.info("Get investor");
         return investorService.findAll()
-                              .stream()
-                              .filter(investor -> Objects.equals(investor.id(), id))
-                              .map(investor -> new InvestorFetchResultRestDto(investor.id(), investor.name()))
-                              .findAny();
+                .stream()
+                .filter(investor -> Objects.equals(investor.id(), id))
+                .map(investor -> new InvestorFetchResultRestDto(investor.id(), investor.name()))
+                .findAny()
+                .orElseThrow(() -> new NoInvestorFoundException(id));
+    }
+
+    public static class NoInvestorFoundException extends RuntimeException {
+        private final String id;
+
+        public NoInvestorFoundException(String id) {
+            this.id = id;
+        }
+
+        public String getId() {
+            return id;
+        }
     }
 }
