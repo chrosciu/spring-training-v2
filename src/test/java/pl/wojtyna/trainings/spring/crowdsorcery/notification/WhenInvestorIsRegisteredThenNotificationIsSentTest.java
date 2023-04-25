@@ -1,4 +1,4 @@
-package pl.wojtyna.trainings.spring.notification;
+package pl.wojtyna.trainings.spring.crowdsorcery.notification;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,6 @@ import pl.wojtyna.trainings.spring.crowdsorcery.investor.InvestorProfile;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.InvestorProfileService;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.InvestorService;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.RegisterInvestor;
-import pl.wojtyna.trainings.spring.crowdsorcery.notification.NotificationModuleConfiguration;
 
 import java.util.Optional;
 
