@@ -2,6 +2,7 @@ package pl.wojtyna.trainings.spring.crowdsorcery.notification;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.support.GenericApplicationContext;
@@ -15,7 +16,7 @@ import pl.wojtyna.trainings.spring.crowdsorcery.investor.RegisterInvestor;
 
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -50,6 +51,11 @@ public class WhenInvestorIsRegisteredThenNotificationIsSentTest {
         investorService.register(new RegisterInvestor("456", "George"));
 
         // then
-        verify(mailSenderMock).send(any(SimpleMailMessage.class));
+        var argumentCaptor = ArgumentCaptor.forClass(SimpleMailMessage.class);
+        verify(mailSenderMock).send(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue()).satisfies(message -> {
+            assertThat(message.getTo()).hasSize(1);
+            assertThat(message.getTo()[0]).isEqualTo("devdev@null.org");
+        });
     }
 }
