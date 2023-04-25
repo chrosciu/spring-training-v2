@@ -7,6 +7,11 @@ import org.springframework.context.annotation.Configuration;
 public class RestModuleConfiguration {
 
     @Bean
+    public RestResources restResources() {
+        return new HardcodedRestResources();
+    }
+
+    @Bean
     public RestClient restClient(RestResources restResources) {
         return new UnirestClient(restResources);
     }
