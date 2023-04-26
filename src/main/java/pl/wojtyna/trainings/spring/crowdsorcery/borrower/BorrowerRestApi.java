@@ -24,10 +24,7 @@ public class BorrowerRestApi {
 
     @GetMapping("/{id}")
     public Borrower fetchBorrowerById(@PathVariable String id) {
-        return borrowerService.findAll().stream()
-                .filter(borrower -> borrower.id().equals(id))
-                .findFirst()
-                .orElse(null);
+        return borrowerService.findById(id).get();
     }
 
     @GetMapping("/confidential")

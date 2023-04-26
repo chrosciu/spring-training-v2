@@ -1,6 +1,7 @@
 package pl.wojtyna.trainings.spring.crowdsorcery.borrower;
 
 import java.util.List;
+import java.util.Optional;
 
 public class BorrowerService {
 
@@ -16,5 +17,9 @@ public class BorrowerService {
 
     public List<Borrower> findAll() {
         return borrowerRepository.findAll();
+    }
+
+    public Optional<Borrower> findById(String id) {
+        return borrowerRepository.findById(id);
     }
 }

@@ -38,4 +38,24 @@ class BorrowerRegistrationTest extends CrowdSorceryTestBase {
             assertThat(borrower.name()).isEqualTo("George The Borrower");
         });
     }
+
+    // @formatter:off
+    @DisplayName("""
+                  predefined borrower can be found
+                 """)
+    // @formatter:on
+    @Test
+    void test2() {
+        // given
+        var id = "123";
+
+        // when
+        var borrower = borrowerService.findById(id);
+
+        // then
+        assertThat(borrower).hasValueSatisfying(b -> {
+            assertThat(b.id()).isEqualTo(id);
+            assertThat(b.name()).isEqualTo("George Borrower");
+        });
+    }
 }
