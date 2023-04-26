@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import pl.wojtyna.trainings.spring.crowdsorcery.investmentsimulation.InvestmentSimulationRunner;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.profile.InvestorProfile;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.Investor;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.InvestorService;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Register and fetch investor REST API")
 @WebMvcTest(InvestorRestApi.class)
 @MockBean(InvestorService.class)
+@MockBean(InvestmentSimulationRunner.class)
 class RegisterAndFetchInvestorRestApiIT {
 
     @Autowired
@@ -154,7 +156,7 @@ class RegisterAndFetchInvestorRestApiIT {
                           """;
 
         // when
-        var result = mockMvc.perform(post("/investorModule/api/v0/investors").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post("/investorModule/api/v0/investors").contentType(MediaType.APPLICATION_JSON)
                                                                 .content(requestBody))
                .andExpect(status().isBadRequest())
                .andExpect(jsonPath("$.errors", is(not(emptyOrNullString()))))

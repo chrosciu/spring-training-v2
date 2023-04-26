@@ -15,14 +15,16 @@ public class TopLevelExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> handleValidationException(MethodArgumentNotValidException exception) {
         var fieldErrors = exception.getFieldErrors()
-                .stream()
-                .map(fieldError -> Map.entry(fieldError.getField(),
-                        fieldError.getDefaultMessage() == null ? "" : fieldError.getDefaultMessage()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+                                   .stream()
+                                   .map(fieldError -> Map.entry(fieldError.getField(),
+                                                                fieldError.getDefaultMessage() == null ? "" : fieldError.getDefaultMessage()))
+                                   .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         return ResponseEntity.badRequest()
-                .body(new ValidationErrorResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                        exception.getMessage(),
-                        fieldErrors));
+                             .body(new ValidationErrorResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                                                               exception.getMessage(),
+                                                               fieldErrors));
+
     }
 
     @ExceptionHandler(RuntimeException.class)
