@@ -4,6 +4,7 @@ import pl.wojtyna.trainings.spring.crowdsorcery.borrower.Borrower;
 import pl.wojtyna.trainings.spring.crowdsorcery.borrower.BorrowerRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class SpringDataBackedBorrowerRepository implements BorrowerRepository {
 
@@ -26,4 +27,12 @@ public class SpringDataBackedBorrowerRepository implements BorrowerRepository {
         return springRepo.findAll().stream().map(borrowerEntity -> new Borrower(
             borrowerEntity.getId(), borrowerEntity.getName())).toList();
     }
+
+    @Override
+    public Optional<Borrower> findById(String id) {
+        return springRepo.findById(id).map(borrowerEntity -> new Borrower(
+                borrowerEntity.getId(), borrowerEntity.getName()));
+    }
+
+
 }
