@@ -2,11 +2,28 @@ package pl.wojtyna.trainings.spring.crowdsorcery.exceptionhandling;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @ControllerAdvice
 public class TopLevelExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationErrorResponse> handleValidationException(MethodArgumentNotValidException exception) {
+        var fieldErrors = exception.getFieldErrors()
+                .stream()
+                .map(fieldError -> Map.entry(fieldError.getField(),
+                        fieldError.getDefaultMessage() == null ? "" : fieldError.getDefaultMessage()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return ResponseEntity.badRequest()
+                .body(new ValidationErrorResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                        exception.getMessage(),
+                        fieldErrors));
+    }
 
     @ExceptionHandler(RuntimeException.class)
     private ResponseEntity<GenericErrorResponse> handleGenericException(RuntimeException exception) {
@@ -16,4 +33,6 @@ public class TopLevelExceptionHandler {
     }
 
     private record GenericErrorResponse(String status, String reason) {}
+
+    private record ValidationErrorResponse(String status, String reason, Map<String, String> errors) {}
 }
