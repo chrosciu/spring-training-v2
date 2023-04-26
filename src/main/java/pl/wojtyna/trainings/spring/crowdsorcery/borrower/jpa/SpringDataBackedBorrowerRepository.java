@@ -9,35 +9,32 @@ import java.util.Optional;
 public class SpringDataBackedBorrowerRepository implements BorrowerRepository {
 
     private final SpringBorrowerEntityRepository springRepo;
+    private final BorrowerEntityMapper borrowerEntityMapper;
 
-    public SpringDataBackedBorrowerRepository(SpringBorrowerEntityRepository springRepo) {
+    public SpringDataBackedBorrowerRepository(SpringBorrowerEntityRepository springRepo,
+                                              BorrowerEntityMapper borrowerEntityMapper) {
         this.springRepo = springRepo;
+        this.borrowerEntityMapper = borrowerEntityMapper;
     }
 
     @Override
     public void save(Borrower borrower) {
-        var borrowerEntity = new BorrowerEntity();
-        borrowerEntity.setId(borrower.id());
-        borrowerEntity.setName(borrower.name());
-        springRepo.save(borrowerEntity);
+        springRepo.save(borrowerEntityMapper.toEntity(borrower));
     }
 
     @Override
     public List<Borrower> findAll() {
-        return springRepo.findAll().stream().map(borrowerEntity -> new Borrower(
-            borrowerEntity.getId(), borrowerEntity.getName())).toList();
+        return springRepo.findAll().stream().map(borrowerEntityMapper::fromEntity).toList();
     }
 
     @Override
     public Optional<Borrower> findById(String id) {
-        return springRepo.findById(id).map(borrowerEntity -> new Borrower(
-                borrowerEntity.getId(), borrowerEntity.getName()));
+        return springRepo.findById(id).map(borrowerEntityMapper::fromEntity);
     }
 
     @Override
     public List<Borrower> findByName(String name) {
-        return springRepo.findByName(name).stream().map(borrowerEntity -> new Borrower(
-                borrowerEntity.getId(), borrowerEntity.getName())).toList();
+        return springRepo.findByName(name).stream().map(borrowerEntityMapper::fromEntity).toList();
     }
 
 

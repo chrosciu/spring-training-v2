@@ -2,6 +2,7 @@ package pl.wojtyna.trainings.spring.crowdsorcery.borrower;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pl.wojtyna.trainings.spring.crowdsorcery.borrower.jpa.BorrowerEntityMapper;
 import pl.wojtyna.trainings.spring.crowdsorcery.borrower.jpa.InitialBorrowersPopulator;
 import pl.wojtyna.trainings.spring.crowdsorcery.borrower.jpa.SpringBorrowerEntityRepository;
 import pl.wojtyna.trainings.spring.crowdsorcery.borrower.jpa.SpringDataBackedBorrowerRepository;
@@ -16,8 +17,9 @@ public class BorrowerModuleConfiguration {
     }
 
     @Bean
-    public BorrowerRepository borrowerRepository(SpringBorrowerEntityRepository springRepository) {
-        return new SpringDataBackedBorrowerRepository(springRepository);
+    public BorrowerRepository borrowerRepository(SpringBorrowerEntityRepository springRepository,
+                                                 BorrowerEntityMapper borrowerEntityMapper) {
+        return new SpringDataBackedBorrowerRepository(springRepository, borrowerEntityMapper);
     }
 
     @Bean
