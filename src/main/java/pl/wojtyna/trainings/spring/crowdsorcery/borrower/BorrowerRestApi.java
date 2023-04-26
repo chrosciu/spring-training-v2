@@ -1,6 +1,5 @@
 package pl.wojtyna.trainings.spring.crowdsorcery.borrower;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,21 +11,23 @@ import java.util.List;
 @RequestMapping("/borrower-module/api/v0/borrowers")
 public class BorrowerRestApi {
 
-    public static final List<Borrower> BORROWERS = List.of(new Borrower("123", "George Borrower"),
-            new Borrower("456", "Henry Borrower"),
-            new Borrower("789", "Martin Borrower"));
+    private final BorrowerService borrowerService;
+
+    public BorrowerRestApi(BorrowerService borrowerService) {
+        this.borrowerService = borrowerService;
+    }
 
     @GetMapping
     public List<Borrower> fetchAllBorrowers() {
-        return BORROWERS;
+        return borrowerService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Borrower> fetchBorrowerById(@PathVariable String id) {
-        //TODO
-        //Find borrower with given id or throw exception and handle it in similar way as with investors
-        //(message / translation etc.)
-        return null;
+    public Borrower fetchBorrowerById(@PathVariable String id) {
+        return borrowerService.findAll().stream()
+                .filter(borrower -> borrower.id().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     @GetMapping("/confidential")
