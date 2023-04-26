@@ -3,6 +3,7 @@ package pl.wojtyna.trainings.spring.crowdsorcery.borrower;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,5 +45,10 @@ public class JdbcBorrowerRepository implements BorrowerRepository {
                 Map.of("id", id),
                 (rs, rowNum) -> new Borrower(rs.getString("id"), rs.getString("name")));
         return Optional.ofNullable(borrower);
+    }
+
+    @Override
+    public List<Borrower> findByName(String id) {
+        return Collections.emptyList();
     }
 }

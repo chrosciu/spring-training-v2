@@ -22,4 +22,8 @@ public class BorrowerService {
     public Optional<Borrower> findById(String id) {
         return borrowerRepository.findById(id);
     }
+
+    public List<Borrower> findByName(String name) {
+        return borrowerRepository.findByName(name);
+    }
 }

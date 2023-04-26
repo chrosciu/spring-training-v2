@@ -10,4 +10,6 @@ public interface BorrowerRepository {
     List<Borrower> findAll();
 
     Optional<Borrower> findById(String id);
+
+    List<Borrower> findByName(String id);
 }

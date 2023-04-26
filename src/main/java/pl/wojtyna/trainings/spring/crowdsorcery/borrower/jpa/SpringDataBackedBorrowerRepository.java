@@ -34,5 +34,11 @@ public class SpringDataBackedBorrowerRepository implements BorrowerRepository {
                 borrowerEntity.getId(), borrowerEntity.getName()));
     }
 
+    @Override
+    public List<Borrower> findByName(String name) {
+        return springRepo.findByName(name).stream().map(borrowerEntity -> new Borrower(
+                borrowerEntity.getId(), borrowerEntity.getName())).toList();
+    }
+
 
 }

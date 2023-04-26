@@ -5,6 +5,7 @@ import pl.wojtyna.trainings.spring.crowdsorcery.borrower.Borrower;
 import pl.wojtyna.trainings.spring.crowdsorcery.borrower.BorrowerRepository;
 
 import javax.persistence.EntityManager;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,11 @@ public class EntityManagerBorrowerRepository implements BorrowerRepository {
         var entity = entityManager.find(BorrowerEntity.class, id);
         return Optional.ofNullable(entity).map(borrowerEntity -> new Borrower(
                 borrowerEntity.getId(), borrowerEntity.getName()));
+    }
+
+    @Override
+    public List<Borrower> findByName(String id) {
+        return Collections.emptyList();
     }
 
 
