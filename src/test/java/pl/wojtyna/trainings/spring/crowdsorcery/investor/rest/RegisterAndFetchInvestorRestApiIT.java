@@ -12,16 +12,19 @@ import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.Investor;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.InvestorService;
 import pl.wojtyna.trainings.spring.crowdsorcery.investor.service.RegisterInvestor;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -158,5 +161,32 @@ class RegisterAndFetchInvestorRestApiIT {
                .andExpect(jsonPath("$.errors.name", is(not(empty()))))
                .andExpect(jsonPath("$.errors.id", is(not(empty()))))
                .andDo(print());
+    }
+
+    @Test
+    void test5() throws Exception {
+        // given
+        doReturn(Collections.emptyList()).when(investorService)
+                .findAll();
+
+        // when
+        mockMvc.perform(get("/investorModule/api/v0/investors/any-id"))
+                .andExpect(status().isNoContent())
+                .andExpect(header().string("X-Message", "Nie znaleziono inwestora o id any-id"))
+                .andDo(print());
+    }
+
+    @Test
+    void test6() throws Exception {
+        // given
+        doReturn(Collections.emptyList()).when(investorService)
+                .findAll();
+
+        // when
+        mockMvc.perform(get("/investorModule/api/v0/investors/any-id")
+                        .header("Accept-Language", "cs"))
+                .andExpect(status().isNoContent())
+                .andExpect(header().string("X-Message", "Ziaden investor s ID any-id nebyl nalezen"))
+                .andDo(print());
     }
 }
