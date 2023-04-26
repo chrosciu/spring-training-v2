@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.MailException;
+import org.springframework.context.annotation.Profile;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import pl.wojtyna.trainings.spring.crowdsorcery.eventpublisher.SubscriberRegistry;
@@ -27,11 +28,15 @@ public class NotificationModuleConfiguration {
     }
 
     @Bean
-    public NotificationService notificationService(MailSender mailSender, EmailAddressResolver emailAddressResolver) {
+    @Profile("!test & !demo")
+    public NotificationService mailNotificationService(MailSender mailSender,
+                                                       EmailAddressResolver emailAddressResolver) {
         return new SimpleMailNotificationService(mailSender, emailAddressResolver);
     }
 
-    private NotificationService stubbedNotificationService() {
+    @Bean
+    @Profile("test | demo")
+    public NotificationService stubbedNotificationService() {
         return event -> {};
     }
 
